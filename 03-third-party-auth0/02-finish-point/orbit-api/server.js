@@ -49,7 +49,8 @@ const requireAuth = jwt({
 });
 
 const getUserId = (user) => {
-  return user[`${process.env.AUTH0_JWT_NAMESPACE}/sub`];
+  // return user[`${process.env.AUTH0_JWT_NAMESPACE}/sub`];
+  return user["sub"];
 };
 
 app.get(
@@ -105,6 +106,7 @@ app.post(
   requireAuth,
   jwtAuthz(["write:inventory"]),
   async (req, res) => {
+    console.log("req");
     try {
       const userId = getUserId(req.user);
       const input = Object.assign({}, req.body, {

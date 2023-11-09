@@ -1,29 +1,26 @@
-import React, { lazy, Suspense } from 'react';
-import {
-  Auth0Provider,
-  useAuth0
-} from '@auth0/auth0-react';
+import React, { lazy, Suspense } from "react";
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect
-} from 'react-router-dom';
-import './App.css';
-import { FetchProvider } from './context/FetchContext';
+  Redirect,
+} from "react-router-dom";
+import "./App.css";
+import { FetchProvider } from "./context/FetchContext";
 
-import AppShell from './AppShell';
+import AppShell from "./AppShell";
 
-import Home from './pages/Home';
-import FourOFour from './pages/FourOFour';
+import Home from "./pages/Home";
+import FourOFour from "./pages/FourOFour";
 
-import logo from './images/logo.png';
+import logo from "./images/logo.png";
 
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Inventory = lazy(() => import('./pages/Inventory'));
-const Account = lazy(() => import('./pages/Account'));
-const Settings = lazy(() => import('./pages/Settings'));
-const Users = lazy(() => import('./pages/Users'));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Inventory = lazy(() => import("./pages/Inventory"));
+const Account = lazy(() => import("./pages/Account"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Users = lazy(() => import("./pages/Users"));
 
 const LoadingFallback = () => (
   <AppShell>
@@ -50,11 +47,7 @@ const AuthenticatedRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={() =>
-        isAuthenticated ? (
-          <AppShell>{children}</AppShell>
-        ) : (
-          <Redirect to="/" />
-        )
+        isAuthenticated ? <AppShell>{children}</AppShell> : <Redirect to="/" />
       }
     ></Route>
   );
@@ -62,9 +55,12 @@ const AuthenticatedRoute = ({ children, ...rest }) => {
 
 const AdminRoute = ({ children, ...rest }) => {
   const { user, isAuthenticated } = useAuth0();
-  const roles =
-    user[`${process.env.REACT_APP_JWT_NAMESPACE}/roles`];
-  const isAdmin = roles[0] === 'admin' ? true : false;
+  const roles = ["admin"]; // user[`${process.env.REACT_APP_JWT_NAMESPACE}/roles`];
+  const isAdmin = roles[0] === "admin" ? true : false;
+
+  // const roles =
+  //   user[`${process.env.REACT_APP_JWT_NAMESPACE}/roles`];
+  // const isAdmin = roles[0] === 'admin' ? true : false;
   return (
     <Route
       {...rest}
@@ -123,24 +119,26 @@ const AppRoutes = () => {
 };
 
 const requestedScopes = [
-  'read:dashboard',
-  'read:inventory',
-  'write:inventory',
-  'edit:inventory',
-  'delete:inventory',
-  'read:users',
-  'read:user',
-  'edit:user'
+  "read:dashboard",
+  "read:inventory",
+  "write:inventory",
+  "edit:inventory",
+  "delete:inventory",
+  "read:users",
+  "read:user",
+  "edit:user",
 ];
+
+console.log("window.location.origin", window.location.origin);
 
 function App() {
   return (
     <Auth0Provider
       domain={process.env.REACT_APP_AUTH0_DOMAIN}
       clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
-      redirectUri={`${window.location.origin}/dashboard`}
       audience={process.env.REACT_APP_AUTH0_AUDIENCE}
-      scope={requestedScopes.join(' ')}
+      redirectUri={`${window.location.origin}/dashboard`}
+      scope={requestedScopes.join(" ")}
     >
       <Router>
         <FetchProvider>
