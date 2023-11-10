@@ -2,4 +2,3 @@ node_modules
 
 /_base
 .env
-.env.local
