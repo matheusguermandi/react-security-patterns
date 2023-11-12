@@ -400,3 +400,44 @@ class AuthDirective extends SchemaDirectiveVisitor {
     });
   }
 }
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  schemaDirectives: {
+    auth: AuthDirective,
+  },
+  context: ({ req }) => {
+    try {
+      const token = req.headers.authorization;
+
+      if (!token) {
+        return { user: null };
+      }
+
+      const decoded = jwt.verify(token.slice(7), process.env.JWT_SECRET);
+
+      return { user: decoded };
+    } catch (err) {
+      return { user: null };
+    }
+  },
+});
+
+async function connect() {
+  try {
+    mongoose.Promise = global.Promise;
+    await mongoose.connect(process.env.ATLAS_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    });
+  } catch (err) {
+    console.log("Mongoose error", err);
+  }
+  server.listen(3001).then(({ url }) => {
+    console.log(`🚀  Server ready at ${url}`);
+  });
+}
+
+connect();
