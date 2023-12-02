@@ -67,3 +67,13 @@ Backend Libraries
 Frontend Library
 
 - @auth0/auth0-react: Auth0's official React SDK for handling authentication and authorization. It simplifies the integration of Auth0 into React applications.
+
+### Graphql auth
+
+This application demonstrates a comprehensive implementation of authentication and authorization for a GraphQL API. The project covers various steps, including running the app and API, exploring the GraphQL implementation, including JWT in a GraphQL request, and enforcing authorization rules.
+
+Technologies Used
+
+- GraphQL: Apollo Server/Client
+- Authentication: JSON Web Tokens (JWT)
+- Authorization: Role-based
